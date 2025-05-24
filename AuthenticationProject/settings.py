@@ -62,7 +62,7 @@ ROOT_URLCONF = 'AuthenticationProject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [BASE_DIR /'Core/templates/Core'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

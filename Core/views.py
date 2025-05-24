@@ -94,7 +94,7 @@ def liste_des_formulaire_charges_avec_filtre_Date_facture(request):
             
             return response
     
-    return render(request, './liste_factures_filtrees.html', {
+    return render(request, 'Core/liste_factures_filtrees.html', {
         'factures': factures,
         'date_debut': request.GET.get('date_debut', ''),
         'date_fin': request.GET.get('date_fin', ''),
@@ -145,7 +145,7 @@ def enregistrer_formulaire_charge_view(request):
     else:
         form = EnregistrerFormulaireChargeForm()
 
-    return render(request, './enregistrer_formulaire_charge.html', {'form': form})
+    return render(request, 'Core/enregistrer_formulaire_charge.html', {'form': form})
 
 def actualiser_formulaire_charge(request, id_formulaire_charge):
     formulaire_charge = FormulaireCharge.objects.get(pk=id_formulaire_charge)
@@ -154,7 +154,7 @@ def actualiser_formulaire_charge(request, id_formulaire_charge):
         form.save()
         return redirect('liste_des_formulaire_charges')
     context = {'formulaire_charge': formulaire_charge, 'form': form}
-    return render(request, './actualizer_formulaire_charge.html', context)
+    return render(request, 'Core/actualizer_formulaire_charge.html', context)
 
 def eliminer_formulaire_charge(request, id_formulaire_charge):
     formulaire_charge = get_object_or_404(FormulaireCharge, id=id_formulaire_charge)
@@ -226,7 +226,7 @@ def liste_des_formulaire_charges(request):
         response['Content-Disposition'] = f'attachment; filename={filename}'
         
         return response
-    return render(request, './la_liste_des_formulaire_charges.html', context)
+    return render(request, 'Core/la_liste_des_formulaire_charges.html', context)
 
 
 def actualiser_la_charge(request, id_charge):
@@ -236,7 +236,7 @@ def actualiser_la_charge(request, id_charge):
         form.save()
         return redirect('liste_des_charges')
     context = {'charge': charge, 'form': form}
-    return render(request, './actualizer_la_charge.html', context)
+    return render(request, 'Core/actualizer_la_charge.html', context)
 
 def eliminer_la_charge(request, id_charge):
     charge = get_object_or_404(Charge, id=id_charge)
@@ -285,7 +285,7 @@ def enregistrer_charge_view(request):
             return redirect('liste_des_charges')  # Cambia esto por la vista a la que deseas redirigir después de guardar
     else:
         form = EnregistrerChargeForm()
-    return render(request, 'enregistrer_charge.html', {'form': form})
+    return render(request, 'Core/enregistrer_charge.html', {'form': form})
 
 
 def liste_des_charges(request):
@@ -302,7 +302,7 @@ def liste_des_charges(request):
     print("hola : " + str(tous_les_charges.paginator.num_pages))
     
     context = {'la_lista_des_charges': la_lista_des_charges, 'tous_les_charges': tous_les_charges, 'nums': nums, 'name':name}
-    return render(request, './la_liste_des_charges.html', context)
+    return render(request, 'Core/la_liste_des_charges.html', context)
 
 def liste_des_chiffres_affaires(request):
     # venue_list = Venue.objects.all().order_by('?')
@@ -318,7 +318,7 @@ def liste_des_chiffres_affaires(request):
     print("hola : " + str(tous_les_chiffres_affaires.paginator.num_pages))
     
     context = {'la_liste_des_chiffres_affaires': la_liste_des_chiffres_affaires, 'tous_les_chiffres_affaires': tous_les_chiffres_affaires, 'nums': nums, 'name':name}
-    return render(request, './la_liste_des_chiffres_affaires.html', context)
+    return render(request, 'Core/la_liste_des_chiffres_affaires.html', context)
 
 def enregistrer_le_chiffre_affaire_view(request):
     if request.method == 'POST':
@@ -361,7 +361,7 @@ def enregistrer_le_chiffre_affaire_view(request):
             return redirect('liste_des_chiffres_affaires')  # Cambia esto por la vista a la que deseas redirigir después de guardar
     else:
         form = EnregistrerChiffreAffaireForm()
-    return render(request, 'enregistrer_le_chiffre_affaire.html', {'form': form})
+    return render(request, 'Core/enregistrer_le_chiffre_affaire.html', {'form': form})
 
 def actualizer_le_chiffre_affaire(request, id_chiffre_affaire):
     le_chiffre_affaire = ChiffreAffaire.objects.get(pk=id_chiffre_affaire)
@@ -370,7 +370,7 @@ def actualizer_le_chiffre_affaire(request, id_chiffre_affaire):
         form.save()
         return redirect('liste_des_chiffres_affaires')
     context = {'le_chiffre_affaire': le_chiffre_affaire, 'form': form}
-    return render(request, './actualizer_le_chiffre_affaire.html', context)
+    return render(request, 'Core/actualizer_le_chiffre_affaire.html', context)
 
 def eliminer_le_chiffre_affaire(request, id_chiffre_affaire):
     le_chiffre_affaire = get_object_or_404(ChiffreAffaire, id=id_chiffre_affaire)
@@ -380,7 +380,7 @@ def eliminer_le_chiffre_affaire(request, id_chiffre_affaire):
 
 @login_required
 def Home(request):
-    return render(request, 'index.html')
+    return render(request, 'Core/index.html')
 
 def RegisterView(request):
 
@@ -418,7 +418,7 @@ def RegisterView(request):
             messages.success(request, "Account created. Login now")
             return redirect('login')
 
-    return render(request, 'register.html')
+    return render(request, 'Core/register.html')
 
 def LoginView(request):
 
@@ -437,7 +437,7 @@ def LoginView(request):
             messages.error(request, "Invalid login credentials")
             return redirect('login')
 
-    return render(request, 'login.html')
+    return render(request, 'Core/login.html')
 
 def LogoutView(request):
 
@@ -478,12 +478,12 @@ def ForgotPassword(request):
             messages.error(request, f"No user with email '{email}' found")
             return redirect('forgot-password')
 
-    return render(request, 'forgot_password.html')
+    return render(request, 'Core/forgot_password.html')
 
 def PasswordResetSent(request, reset_id):
 
     if PasswordReset.objects.filter(reset_id=reset_id).exists():
-        return render(request, 'password_reset_sent.html')
+        return render(request, 'Core/password_reset_sent.html')
     else:
         # redirect to forgot password page if code does not exist
         messages.error(request, 'Invalid reset id')
@@ -535,5 +535,5 @@ def ResetPassword(request, reset_id):
         # redirect to forgot password page if code does not exist
         messages.error(request, 'Invalid reset id')
         return redirect('forgot-password')
-
-    return render(request, 'reset_password.html')
+    
+    return render(request, 'Core/reset_password.html')
