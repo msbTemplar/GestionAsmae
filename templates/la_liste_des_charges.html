@@ -1,0 +1,137 @@
+{% extends './base.html' %} 
+
+
+{% block content %}
+  <div class="row">
+    <div class="col col-8"><h1>la liste des charges</h1></div>
+    <div class="col col-4"><h2 class="btn-primary text-center rounded text-warning">Utilizateur connecté(e): 
+      {% if user.is_authenticated %}
+      {{name}}
+      {% else %}
+      Tu n´est pas connécté(e)
+      {% endif %}
+    </h2></div>
+  </div>
+  
+  <!-- antes venue_list-->
+
+  <table class="table table-striped table-hover table-bordered border-primary shadow rounded custom-table">
+    <thead>
+      <tr>
+        <th scope="col" class="text-center">Nom Charge</th>
+       
+        {% if user.is_superuser %}
+        <th scope="col" class="text-center">Actualiser</th>
+        {% endif %}
+        {% if user.is_superuser %}
+        <th scope="col" class="text-center">{% if user.is_authenticated %}Eliminer{% endif %}</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for la_charge in la_lista_des_charges %}
+      <tr>
+        <th class="text-wrap" style="max-width: 150px;" scope="row">{{la_charge.nome_charge}}</th>
+      
+        {% if user.is_superuser %}
+        <td style="text-align: center;">
+          
+          <a class="btn btn-success" href="{% url 'actualiser_la_charge' la_charge.id %}">Actualiser {{la_charge.id}}</a>
+          
+        </td>
+        {% endif %}
+       
+        {% if user.is_superuser %}
+        <td style="text-align: center;">
+          
+          <a class="btn btn-danger" href="#" onclick="confirmDelete('{{ la_charge.id }}')">Eliminer {{la_charge.id}}</a>
+          
+      </td>
+      {% endif %}
+      </tr>
+      {% endfor %}
+      
+    </tbody>
+  </table> 
+  <br /><br />
+  <br />
+  {% if tous_les_charges.has_previous %}
+  <a class="btn btn-primary" href="?page=1">&laquo; First</a>
+  <a
+    class="btn btn-success"
+    href="?page={{ tous_les_charges.previous_page_number }}"
+    >Previous</a
+  >
+  {% endif %}
+
+  <div class="btn btn-light">
+    Page {{ tous_les_charges.number }} of {{ tous_les_charges.paginator.num_pages }}
+  </div>
+  {% if tous_les_charges.has_next %}
+  <a
+    class="btn btn-danger"
+    href="?page={{tous_les_charges.next_page_number}}"
+    >Next</a
+  >
+  <a
+    class="btn btn-warning"
+    href="?page={{ tous_les_charges.paginator.num_pages }}"
+    >Last &raquo;</a
+  >
+  {% endif %}
+  <br /><br />
+
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      {% if tous_les_charges.has_previous %}
+      <li class="page-item m-1">
+        <a class="btn btn-primary page-link" href="?page=1">&laquo; First</a>
+      </li>
+      <li class="page-item m-1">
+        <a
+          class="btn btn-success page-link"
+          href="?page={{ tous_les_charges.previous_page_number }}"
+          >Previous</a
+        >
+      </li>
+
+      {% endif %}
+
+      <li class="page-item m-1 page-link">
+        Page {{ tous_les_charges.number }} of {{ tous_les_charges.paginator.num_pages }}
+      </li>
+
+      {% for i in nums %}
+      <li class="page-item m-1">
+        <a class="btn btn-danger page-link" href="?page={{forloop.counter }}"
+          >{{ forloop.counter }}</a
+        >
+      </li>
+      {% endfor %} {% if tous_les_charges.has_next %}
+
+      <li class="page-item m-1">
+        <a
+          class="btn btn-danger page-link"
+          href="?page={{tous_les_charges.next_page_number}}"
+          >Next</a
+        >
+      </li>
+      <li class="page-item m-1">
+        <a
+          class="btn btn-warning page-link"
+          href="?page={{ tous_les_charges.paginator.num_pages }}"
+          >Last &raquo;</a
+        >
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <br />
+
+
+
+{% endblock %}
+
+
+  

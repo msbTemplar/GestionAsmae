@@ -1,0 +1,181 @@
+{% extends './base.html' %} 
+{% load static %}
+
+{% block content %}
+  <div class="row">
+    <div class="col col-8"><h1>Liste charges de l'immeuble</h1></div>
+    <div class="col col-4"><h2 class="btn-primary text-center rounded text-warning">Utilizateur connecté(e): 
+      {% if user.is_authenticated %}
+      {{name}}
+      {% else %}
+      Tu n´est pas connécté(e)
+      {% endif %}
+    </h2></div>
+  </div>
+  
+  <div class="container mt-4">
+  <h2 class="mb-4">Filtrer les charges par date de facture</h2>
+
+  <form method="get" class="row g-3">
+    <div class="col-md-4">
+      <label for="date_debut" class="form-label">Date début</label>
+      <input type="date" name="date_debut" id="date_debut" class="form-control" value="{{ date_debut }}">
+    </div>
+
+    <div class="col-md-4">
+      <label for="date_fin" class="form-label">Date fin</label>
+      <input type="date" name="date_fin" id="date_fin" class="form-control" value="{{ date_fin }}">
+    </div>
+
+    <div class="col-md-4 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary w-100">Rechercher</button>
+    </div>
+  </form>
+
+  {% if factures %}
+    <div class="mt-5">
+      <h3>Résultats</h3>
+      <table class="table table-bordered table-striped mt-3">
+        <thead class="table-light">
+          <tr>
+            <th scope="col" class="text-center">#</th>
+            <th scope="col" class="text-center">Date Facture</th>
+            <th scope="col" class="text-center">Mois</th>
+            <th scope="col" class="text-center">Charge</th>
+            <th scope="col" class="text-center">Nº Facture</th>
+            <th scope="col" class="text-center">Montant</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for f in factures %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ f.date_facture }}</td>
+              <td>{{ f.get_mois_display }}</td>
+              <td>{{ f.charge.nome_charge }}</td>  {# Asegúrate que Charge tiene campo nom_charge #}
+              <td>{{ f.num_facture }}</td>
+              <td>{{ f.montant_charge }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+      <tr>
+          <td colspan="5" class="text-end fw-bold">Total Montant</td>
+          <td class="fw-bold">{{ total_montant|floatformat:2 }}</td>
+          <!-- <th colspan="{% if user.is_superuser %}5{% else %}1{% endif %}"></th> -->
+      </tr>
+      {% if chiffre_affaire %}
+      <tr>
+          <td colspan="5" class="text-end fw-bold">Chiffre d'affaire {{ chiffre_affaire.annee }}</td>
+          <td class="fw-bold">{{ chiffre_affaire.montant|floatformat:2 }}</td>
+      </tr>
+      <tr>
+          <td colspan="5" class="text-end fw-bold text-danger">Différence (Chiffre d'affaire - Total)</td>
+          <td class="fw-bold text-danger">{{ difference|floatformat:2 }}</td>
+      </tr>
+      {% endif %}
+      
+      {% if user.is_superuser %}
+      <tr>
+        <td colspan="9" class="text-center">
+          <!-- Agrega el botón para exportar a Excel -->
+    <a href="?export=excel&date_debut={{ date_debut }}&date_fin={{ date_fin }}" class="btn btn-success">Exportar a Excel</a>
+        
+        </td>
+      </tr>
+      {% endif %}
+  </tfoot>
+      </table>
+    </div>
+  {% elif date_debut and date_fin %}
+    <div class="alert alert-warning mt-4">
+      Aucune charge trouvée dans cette période.
+    </div>
+  {% endif %}
+</div>
+  
+  
+
+  <br /><br />
+  <br />
+  {% if tous_les_formulaire_charges.has_previous %}
+  <a class="btn btn-primary" href="?page=1">&laquo; First</a>
+  <a
+    class="btn btn-success"
+    href="?page={{ tous_les_formulaire_charges.previous_page_number }}"
+    >Previous</a
+  >
+  {% endif %}
+
+  <div class="btn btn-light">
+    Page {{ tous_les_formulaire_charges.number }} of {{ tous_les_formulaire_charges.paginator.num_pages }}
+  </div>
+  {% if tous_les_formulaire_charges.has_next %}
+  <a
+    class="btn btn-danger"
+    href="?page={{tous_les_formulaire_charges.next_page_number}}"
+    >Next</a
+  >
+  <a
+    class="btn btn-warning"
+    href="?page={{ tous_les_formulaire_charges.paginator.num_pages }}"
+    >Last &raquo;</a
+  >
+  {% endif %}
+  <br /><br />
+
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      {% if tous_les_formulaire_charges.has_previous %}
+      <li class="page-item m-1">
+        <a class="btn btn-primary page-link" href="?page=1">&laquo; First</a>
+      </li>
+      <li class="page-item m-1">
+        <a
+          class="btn btn-success page-link"
+          href="?page={{ tous_les_formulaire_charges.previous_page_number }}"
+          >Previous</a
+        >
+      </li>
+
+      {% endif %}
+
+      <li class="page-item m-1 page-link">
+        Page {{ tous_les_formulaire_charges.number }} of {{ tous_les_formulaire_charges.paginator.num_pages }}
+      </li>
+
+      {% for i in nums %}
+      <li class="page-item m-1">
+        <a class="btn btn-danger page-link" href="?page={{forloop.counter }}"
+          >{{ forloop.counter }}</a
+        >
+      </li>
+      {% endfor %} {% if tous_les_formulaire_charges.has_next %}
+
+      <li class="page-item m-1">
+        <a
+          class="btn btn-danger page-link"
+          href="?page={{tous_les_formulaire_charges.next_page_number}}"
+          >Next</a
+        >
+      </li>
+      <li class="page-item m-1">
+        <a
+          class="btn btn-warning page-link"
+          href="?page={{ tous_les_formulaire_charges.paginator.num_pages }}"
+          >Last &raquo;</a
+        >
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <br />
+
+ 
+
+
+{% endblock %}
+
+
+  

@@ -1,0 +1,15 @@
+{% extends './base.html' %} {% block content %}
+
+<h1>Enregister Une charge Complete</h1>
+<br /><br />
+
+<form action="" method="post" enctype="multipart/form-data" id="registroForm">
+  {% csrf_token %}
+  {{ form.as_p }}
+  
+  <input type="submit" value="Submit" class="btn btn-primary" />
+</form>
+
+<br /><br />
+
+{% endblock %}

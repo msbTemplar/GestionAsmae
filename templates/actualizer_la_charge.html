@@ -1,0 +1,24 @@
+{% extends './base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+    <h1>Actualiser la charge....</h1>
+    
+    <form action="" method="POST" enctype="multipart/form-data" id="actualiserChargeForm">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success mb-5 w-100" >Actualiser Charge </button>
+    </form>
+    
+   
+    {% else %}
+
+    <h1>sorry you must be login to view this page</h1>
+    <a class="btn btn-secondary" href="{% url 'login' %}">Login Here</a>
+    
+    {% endif %}
+
+    
+{% endblock %}
