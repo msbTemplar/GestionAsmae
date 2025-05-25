@@ -81,6 +81,8 @@ def liste_des_formulaire_charges_avec_filtre_Date_facture(request):
                 ws.append(row)
                 
             ws.append(['Total Montant', '', '','', total_montant])
+            ws.append(['Chiffre Affaire', '', '', '', float(chiffre_affaire.montant) if chiffre_affaire else 0])
+            ws.append(['Diference Chiffre affaire - total', '', '', '', float(difference or 0)])
             
             # Crear una respuesta HTTP con el archivo Excel
             filename = f"liste_charges_immeuble_filtrer_date_facture_{today.strftime('%Y%m%d_%H%M%S')}.xlsx"
