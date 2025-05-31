@@ -39,7 +39,8 @@
         <thead class="table-light">
           <tr>
             <th scope="col" class="text-center">#</th>
-            <th scope="col" class="text-center">Date Facture</th>
+            <th scope="col" class="text-center">Date Facture Du</th>
+            <th scope="col" class="text-center">Date Facture AU</th>
             <th scope="col" class="text-center">Mois</th>
             <th scope="col" class="text-center">Charge</th>
             <th scope="col" class="text-center">Nº Facture</th>
@@ -50,7 +51,8 @@
           {% for f in factures %}
             <tr>
               <td>{{ forloop.counter }}</td>
-              <td>{{ f.date_facture }}</td>
+              <td>{{ f.date_facture_du }}</td>
+              <td>{{ f.date_facture_au }}</td>
               <td>{{ f.get_mois_display }}</td>
               <td>{{ f.charge.nome_charge }}</td>  {# Asegúrate que Charge tiene campo nom_charge #}
               <td>{{ f.num_facture }}</td>
@@ -60,17 +62,17 @@
         </tbody>
         <tfoot>
       <tr>
-          <td colspan="5" class="text-end fw-bold">Total Montant</td>
+          <td colspan="6" class="text-end fw-bold">Total Montant</td>
           <td class="fw-bold">{{ total_montant|floatformat:2 }}</td>
           <!-- <th colspan="{% if user.is_superuser %}5{% else %}1{% endif %}"></th> -->
       </tr>
       {% if chiffre_affaire %}
       <tr>
-          <td colspan="5" class="text-end fw-bold">Chiffre d'affaire {{ chiffre_affaire.annee }}</td>
+          <td colspan="6" class="text-end fw-bold">Chiffre d'affaire {{ chiffre_affaire.annee }}</td>
           <td class="fw-bold">{{ chiffre_affaire.montant|floatformat:2 }}</td>
       </tr>
       <tr>
-          <td colspan="5" class="text-end fw-bold text-danger">Différence (Chiffre d'affaire - Total)</td>
+          <td colspan="6" class="text-end fw-bold text-danger">Différence (Chiffre d'affaire - Total)</td>
           <td class="fw-bold text-danger">{{ difference|floatformat:2 }}</td>
       </tr>
       {% endif %}

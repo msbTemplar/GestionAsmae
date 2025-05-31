@@ -33,7 +33,7 @@ def liste_des_formulaire_charges_avec_filtre_Date_facture(request):
     if date_debut and date_fin:
         date_debut = parse_date(date_debut)
         date_fin = parse_date(date_fin)
-        factures = FormulaireCharge.objects.filter(date_facture__range=(date_debut, date_fin)).select_related('charge')
+        factures = FormulaireCharge.objects.filter(date_facture_du__range=(date_debut, date_fin)).select_related('charge')
         total_montant = factures.aggregate(total=Sum('montant_charge'))['total']
         
         # Obtener el año del rango (por simplicidad, asumimos que inicio y fin están en el mismo año)
@@ -56,7 +56,7 @@ def liste_des_formulaire_charges_avec_filtre_Date_facture(request):
             #ws2 = wb.create_sheet(title="Formulaire Concierge")
 
             # Agregar los encabezados de la tabla
-            headers = ['Date Paiement', 'Charge', 'Date Facture', 'Mois', 'Montant', 'Nom du fichier']
+            headers = ['Date Paiement', 'Charge', 'Date Facture Du', 'Date Facture Au','Mois', 'Montant', 'Nom du fichier']
             
             #if request.user.is_superuser:
                 #headers.extend(['Imprimer pdf', 'Actualiser', 'Eliminer'])
@@ -71,7 +71,8 @@ def liste_des_formulaire_charges_avec_filtre_Date_facture(request):
                 row = [
                     item.date_payement.strftime('%Y-%m-%d %H:%M'),
                     item.charge.nome_charge if item.charge else '',
-                    item.date_facture.strftime('%Y-%m-%d'),
+                    item.date_facture_du.strftime('%Y-%m-%d'),
+                    item.date_facture_au.strftime('%Y-%m-%d'),
                     item.get_mois_display(),  # Para mostrar el nombre del mes en lugar de '01', '02'...
                     float(item.montant_charge),
                     item.image_charge.name if item.image_charge else ''
@@ -80,9 +81,9 @@ def liste_des_formulaire_charges_avec_filtre_Date_facture(request):
                     #row.extend(['Imprimer', 'Actualiser', 'Eliminer'])
                 ws.append(row)
                 
-            ws.append(['Total Montant', '', '','', total_montant])
-            ws.append(['Chiffre Affaire', '', '', '', float(chiffre_affaire.montant) if chiffre_affaire else 0])
-            ws.append(['Diference Chiffre affaire - total', '', '', '', float(difference or 0)])
+            ws.append(['Total Montant', '', '','','', total_montant])
+            ws.append(['Chiffre Affaire', '', '', '','', float(chiffre_affaire.montant) if chiffre_affaire else 0])
+            ws.append(['Diference Chiffre affaire - total', '', '','', '', float(difference or 0)])
             
             # Crear una respuesta HTTP con el archivo Excel
             filename = f"liste_charges_immeuble_filtrer_date_facture_{today.strftime('%Y%m%d_%H%M%S')}.xlsx"
@@ -191,7 +192,7 @@ def liste_des_formulaire_charges(request):
         #ws2 = wb.create_sheet(title="Formulaire Concierge")
 
         # Agregar los encabezados de la tabla
-        headers = ['Date Paiement', 'Charge', 'Date Facture', 'Mois', 'Montant', 'Nom du fichier']
+        headers = ['Date Paiement', 'Charge', 'Date Facture Du', 'Date Facture Au', 'Mois', 'Montant', 'Nom du fichier']
         
         #if request.user.is_superuser:
             #headers.extend(['Imprimer pdf', 'Actualiser', 'Eliminer'])
@@ -206,7 +207,8 @@ def liste_des_formulaire_charges(request):
             row = [
                 item.date_payement.strftime('%Y-%m-%d %H:%M'),
                 item.charge.nome_charge if item.charge else '',
-                item.date_facture.strftime('%Y-%m-%d'),
+                item.date_facture_du.strftime('%Y-%m-%d'),
+                item.date_facture_au.strftime('%Y-%m-%d'),
                 item.get_mois_display(),  # Para mostrar el nombre del mes en lugar de '01', '02'...
                 float(item.montant_charge),
                 item.image_charge.name if item.image_charge else ''
@@ -215,7 +217,7 @@ def liste_des_formulaire_charges(request):
                 #row.extend(['Imprimer', 'Actualiser', 'Eliminer'])
             ws.append(row)
             
-        ws.append(['Total Montant', '', '','', total_montant])
+        ws.append(['Total Montant', '', '', '','', total_montant])
         
         # Crear una respuesta HTTP con el archivo Excel
         filename = f"liste_charges_immeuble_{today.strftime('%Y%m%d_%H%M%S')}.xlsx"

@@ -45,9 +45,14 @@ class EnregistrerFormulaireChargeForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Nº Facture'
             }),
-            'date_facture': forms.DateInput(attrs={
+            'date_facture_du': forms.DateInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Date Facture',
+                'placeholder': 'Date Facture Du',
+                'type': 'date'
+            }),
+            'date_facture_au': forms.DateInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Date Facture Au',
                 'type': 'date'
             }),
             'mois': forms.Select(attrs={

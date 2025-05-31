@@ -34,7 +34,8 @@
       <tr>
         <th scope="col" class="text-center">Date Paiement</th>
         <th scope="col" class="text-center">Nom de la Charge</th>
-        <th scope="col" class="text-center">Date Facture</th>
+        <th scope="col" class="text-center">Date Facture Du</th>
+        <th scope="col" class="text-center">Date Facture Au</th>
         <th scope="col" class="text-center">Mois</th>
         <th scope="col" class="text-center">Montant</th>
         <th scope="col" class="text-center">Fichier</th>
@@ -57,7 +58,10 @@
         {{ formulaire_charge.charge.nome_charge }}
     </th>
     <th class="text-wrap" style="max-width: 150px;" scope="row">
-        {{ formulaire_charge.date_facture|date:"Y-m-d" }}
+        {{ formulaire_charge.date_facture_du|date:"Y-m-d" }}
+    </th>
+    <th class="text-wrap" style="max-width: 150px;" scope="row">
+        {{ formulaire_charge.date_facture_au|date:"Y-m-d" }}
     </th>
     <th class="text-wrap" style="max-width: 150px;" scope="row">
         {{ formulaire_charge.get_mois_display }}
@@ -98,7 +102,7 @@
     </tbody>
     <tfoot>
       <tr>
-          <th colspan="4" class="text-right">Total Montant</th>
+          <th colspan="5" class="text-right">Total Montant</th>
           <th class="text-wrap" style="max-width: 150px;" scope="row">{{ total_montant|floatformat:2 }}</th>
           <th colspan="{% if user.is_superuser %}4{% else %}2{% endif %}"></th>
       </tr>

@@ -35,7 +35,8 @@ class FormulaireCharge(models.Model):
     date_payement=models.DateField('Date Payement')
     charge=models.ForeignKey(Charge, blank=True, null=True, on_delete=models.CASCADE)
     num_facture = models.CharField('Nº Facture', max_length=500)
-    date_facture=models.DateField('Date Facture')
+    date_facture_du=models.DateField('Date Facture Du')
+    date_facture_au=models.DateField('Date Facture Au', null=True, blank=True)
     mois = models.CharField('Mois', max_length=2, choices=MOIS_CHOICES)
     #au=models.DateField('Au')
     montant_charge = models.DecimalField('Montant Charge', max_digits=10, decimal_places=2)  # Agregar max_digits y decimal_places
@@ -44,7 +45,7 @@ class FormulaireCharge(models.Model):
                                     validators=[validate_file_extension])
     
     def __str__(self) -> str:  # Agregar un método __str__ para esta clase también
-        return f"FormulaireCharge Charge {self.charge} Date Facture {self.date_facture} Nº Facture {self.num_facture} avec le montant {self.montant_charge} "
+        return f"FormulaireCharge Charge {self.charge} Date Facture DU {self.date_facture_du} Nº Facture {self.num_facture} avec le montant {self.montant_charge} "
 
 class ChiffreAffaire(models.Model):
     annee = models.PositiveIntegerField("Année")
